@@ -28,11 +28,13 @@ public class DiaryController {
     }
 
     final void delete(final String id) {
-        diaryService.deleteDiary(Integer.parseInt(id));
+        long longId = validateAndConvertId(id);
+        diaryService.deleteDiary(longId);
     }
 
     final void patch(final String id, final String body) {
-        diaryService.updateDiary(Integer.parseInt(id), body);
+        long longId = validateAndConvertId(id);
+        diaryService.updateDiary(longId, body);
     }
 
     enum Status {
@@ -40,5 +42,17 @@ public class DiaryController {
         RUNNING,
         FINISHED,
         ERROR,
+    }
+
+    private long validateAndConvertId(final String id) {
+        if (!id.matches("^[1-9][0-9]*$")) {
+            throw new Main.UI.InvalidInputException();
+        }
+
+        try {
+            return Long.parseLong(id);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("유효한 long 형식의 ID여야 합니다.");
+        }
     }
 }

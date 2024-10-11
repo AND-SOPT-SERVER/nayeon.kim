@@ -12,11 +12,10 @@ public class DiaryService {
     List<Diary> getDiaryList(){
         return diaryRepository.findAll();
     }
-    void deleteDiary(int id){
+    void deleteDiary(long id){
         diaryRepository.delete(id);
     }
-    void updateDiary(int id, String body){
-        final Diary diary = new Diary((long) id, body);
-        diaryRepository.update(id ,diary);
+    void updateDiary(long id, String body){
+        diaryRepository.update(id ,body);
     }
 }

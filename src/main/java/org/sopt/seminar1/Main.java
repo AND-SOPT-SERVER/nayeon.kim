@@ -57,6 +57,14 @@ public class Main {
             } while (isRunning());
         }
 
+        //30글자 제한
+        private void validateInputLength(final String input) throws InvalidInputException, IOException {
+            if (input.length() > 30) {
+                ConsoleIO.printLine("일기는 최대 30글자까지만 입력할 수 있습니다. 다시 입력해주세요.");
+                throw new InvalidInputException();
+            }
+        }
+
         private void run() throws IOException {
             switch (server.getStatus()) {
                 case READY, FINISHED, ERROR -> throw new UIException();
@@ -75,6 +83,7 @@ public class Main {
                         case "POST" -> {
                             ConsoleIO.printLine("한 줄 일기를 작성해주세요!");
                             final String input = ConsoleIO.readLine();
+                            validateInputLength(input);
                             server.post(input);
                         }
 
@@ -89,7 +98,7 @@ public class Main {
 
                             ConsoleIO.printLine("수정 body 를 입력하세요!");
                             final String inputBody = ConsoleIO.readLine();
-
+                            validateInputLength(inputBody);
                             server.patch(inputId, inputBody);
                         }
                         case "FINISH" -> {

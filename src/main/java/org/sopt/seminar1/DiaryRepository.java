@@ -28,7 +28,8 @@ public class DiaryRepository {
     void delete(final long id) {
         storage.remove(id);
     }
-    void update(final long id,final Diary diary) {
-        storage.put(id, diary.getBody());
+
+    void update(final long id,final String newBody) {
+        storage.replace(id, newBody);
     }
 }
