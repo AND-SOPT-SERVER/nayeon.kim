@@ -18,4 +18,7 @@ public class DiaryService {
     void updateDiary(long id, String body){
         diaryRepository.update(id ,body);
     }
+    void restoreDiary(long id) { // 복구 기능 추가
+        diaryRepository.restore(id);
+    }
 }
