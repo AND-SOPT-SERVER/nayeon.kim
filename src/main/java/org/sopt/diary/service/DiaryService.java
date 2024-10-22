@@ -9,6 +9,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +25,17 @@ public class DiaryService {
 
     //일기 작성
     public void createDiary(String title, String body) {
+        List<DiaryEntity> recentDiaries = diaryRepository.findAll(Sort.by(Sort.Direction.DESC, "date"));
+        if (!recentDiaries.isEmpty()) {
+            DiaryEntity recentDiary = recentDiaries.get(0);
+            LocalDateTime recentTime = recentDiary.getDate();
+            LocalDateTime now = LocalDateTime.now();
+
+            Duration duration = Duration.between(recentTime, now);
+            if (duration.toMinutes() < 5) {
+                throw new IllegalArgumentException("일기는 5분에 한 번만 작성할 수 있습니다.");
+            }
+        }
         if (title.length() > 30){
             throw new IllegalArgumentException("제목은 30자를 초과할 수 없습니다.");
         }

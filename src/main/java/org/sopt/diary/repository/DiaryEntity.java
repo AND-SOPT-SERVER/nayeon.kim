@@ -3,6 +3,7 @@ package org.sopt.diary.repository;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 public class DiaryEntity {
@@ -17,7 +18,7 @@ public class DiaryEntity {
     public String body;
 
     @Column
-    public String date;
+    public LocalDateTime date;
 
     public DiaryEntity() {
 
@@ -25,7 +26,7 @@ public class DiaryEntity {
     public DiaryEntity(String title, String body) {
         this.title = title;
         this.body = body;
-        this.date = LocalDate.now().toString();
+        this.date = LocalDateTime.now();
     }
 
     public  String getTitle() {
@@ -46,7 +47,11 @@ public class DiaryEntity {
         return id;
     }
 
-    public String getDate(){
+    public LocalDateTime getDate(){
         return date;
+    }
+
+    public void setDate(LocalDateTime date){
+        this.date = date;
     }
 }

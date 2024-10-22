@@ -2,15 +2,17 @@ package org.sopt.diary.api;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import java.time.LocalDateTime;
+
 public class DiaryResponse {
     private long id;
     private String title;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String body;
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private String date;
+    private LocalDateTime date;
 
-    public DiaryResponse(long id, String title, String body, String date) {
+    public DiaryResponse(long id, String title, String body, LocalDateTime date) {
         this.id = id;
         this.title = title;
         this.body = body;
@@ -26,7 +28,7 @@ public class DiaryResponse {
     public String getBody() {
         return body;
     }
-    public String getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 }

@@ -1,12 +1,14 @@
 package org.sopt.diary.service;
 
+import java.time.LocalDateTime;
+
 public class Diary {
     private final long id;
     private final String title;
     private String body;
-    private final String date;
+    private final LocalDateTime date;
 
-    public Diary(long id, String title, String body, String date) {
+    public Diary(long id, String title, String body, LocalDateTime date) {
         this.id = id;
         this.title = title;
         this.body = body;
@@ -21,7 +23,7 @@ public class Diary {
     public String getBody() {
         return body;
     }
-    public String getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
     public void setBody(String body) {
