@@ -1,6 +1,7 @@
 package org.sopt.diary.service;
 
 import org.sopt.diary.error.TooManyRequestsException;
+import org.sopt.diary.repository.Category;
 import org.sopt.diary.repository.DiaryEntity;
 import org.sopt.diary.repository.DiaryRepository;
 import org.springframework.data.domain.PageRequest;
@@ -25,7 +26,7 @@ public class DiaryService {
     }
 
     //일기 작성
-    public void createDiary(String title, String body) {
+    public void createDiary(String title, String body, Category category) {
         List<DiaryEntity> recentDiaries = diaryRepository.findAll(Sort.by(Sort.Direction.DESC, "date"));
         if (!recentDiaries.isEmpty()) {
             DiaryEntity recentDiary = recentDiaries.get(0);
@@ -45,7 +46,7 @@ public class DiaryService {
             throw new IllegalArgumentException("일기 글자수는 30자를 초과할 수 없습니다.");
         }
         diaryRepository.save(
-                new DiaryEntity(title,body)
+                new DiaryEntity(title,body,category)
         );
     }
 
@@ -56,7 +57,7 @@ public class DiaryService {
         List<Diary> diaryList = new ArrayList<>();
         for (DiaryEntity diaryEntity : diaryEntityList) {
             diaryList.add(
-                    new Diary(diaryEntity.getId(), diaryEntity.getTitle(), null, null)
+                    new Diary(diaryEntity.getId(), diaryEntity.getTitle(), null, null, diaryEntity.getCategory())
             );
         }
         return diaryList;
@@ -65,7 +66,7 @@ public class DiaryService {
     //일기 상세 조회
     public Diary getDiaryDetails(long id) {
         DiaryEntity diaryEntity = diaryRepository.findById(id).orElse(null);
-        return new Diary(diaryEntity.getId(),  diaryEntity.getTitle(), diaryEntity.getBody(), diaryEntity.getDate());
+        return new Diary(diaryEntity.getId(),  diaryEntity.getTitle(), diaryEntity.getBody(), diaryEntity.getDate(), diaryEntity.getCategory());
     }
 
     //일기 수정
@@ -81,5 +82,15 @@ public class DiaryService {
     //일기 삭제
     public void deleteDiary(long id) {
         diaryRepository.deleteById(id);
+    }
+
+    //카테고리별 일기 조회
+    public List<Diary> getDiariesByCategory(Category category) {
+        List<DiaryEntity> diaryEntityList = diaryRepository.findByCategory(category);
+        List<Diary> diaryList = new ArrayList<>();
+        for (DiaryEntity diaryEntity : diaryEntityList) {
+            new Diary(diaryEntity.getId(), diaryEntity.getTitle(), null, null, diaryEntity.getCategory());
+        }
+        return diaryList;
     }
 }

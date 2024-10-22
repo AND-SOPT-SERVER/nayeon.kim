@@ -20,13 +20,18 @@ public class DiaryEntity {
     @Column
     public LocalDateTime date;
 
+    @Enumerated(EnumType.STRING)
+    @Column
+    public Category category;
+
     public DiaryEntity() {
 
     }
-    public DiaryEntity(String title, String body) {
+    public DiaryEntity(String title, String body, Category category) {
         this.title = title;
         this.body = body;
         this.date = LocalDateTime.now();
+        this.category = category;
     }
 
     public  String getTitle() {
@@ -51,7 +56,11 @@ public class DiaryEntity {
         return date;
     }
 
-    public void setDate(LocalDateTime date){
-        this.date = date;
+    public Category getCategory(){
+        return category;
+    }
+
+    public void setCategory(Category category){
+        this.category = category;
     }
 }

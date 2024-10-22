@@ -1,5 +1,6 @@
 package org.sopt.diary.api;
 
+import org.sopt.diary.repository.Category;
 import org.sopt.diary.service.Diary;
 import org.sopt.diary.service.DiaryService;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class DiaryController {
     //일기 작성
     @PostMapping("/diaries")
     void post(@RequestBody DiaryRequest diaryRequest) {
-        diaryService.createDiary(diaryRequest.getTitle(), diaryRequest.getBody());
+        diaryService.createDiary(diaryRequest.getTitle(), diaryRequest.getBody(), diaryRequest.getCategory());
     }
 
     //일기 목록 조회
@@ -28,7 +29,7 @@ public class DiaryController {
         List<Diary> diaryList = diaryService.getList();
         List<DiaryResponse> diaryResponseList = new ArrayList<>();
         for (Diary diary : diaryList) {
-            diaryResponseList.add(new DiaryResponse(diary.getId(),diary.getTitle(),null,null));
+            diaryResponseList.add(new DiaryResponse(diary.getId(),diary.getTitle(),null,null, diary.getCategory()));
         }
         return ResponseEntity.ok(new DiaryListResponse(diaryResponseList));
     }
@@ -37,7 +38,7 @@ public class DiaryController {
     @GetMapping("/diaries/{id}")
     ResponseEntity<DiaryResponse> getDetail(@PathVariable("id") Long id) {
         Diary diary = diaryService.getDiaryDetails(id);
-        return ResponseEntity.ok(new DiaryResponse(diary.getId(), diary.getTitle(), diary.getBody(), diary.getDate()));
+        return ResponseEntity.ok(new DiaryResponse(diary.getId(), diary.getTitle(), diary.getBody(), diary.getDate(), diary.getCategory()));
     }
 
     //일기 수정
@@ -50,5 +51,16 @@ public class DiaryController {
     @DeleteMapping("/diaries/{id}")
     void delete(@PathVariable("id") Long id) {
         diaryService.deleteDiary(id);
+    }
+
+    //카테고리별 일기 조회
+    @GetMapping("/diaries/category/{category}")
+    ResponseEntity<DiaryListResponse> getDiariesByCategory(@PathVariable("category") Category category) {
+        List<Diary> diaryList = diaryService.getDiariesByCategory(category);
+        List<DiaryResponse> diaryResponseList = new ArrayList<>();
+        for (Diary diary : diaryList) {
+            diaryResponseList.add(new DiaryResponse(diary.getId(),diary.getTitle(),null,null, diary.getCategory()));
+        }
+        return ResponseEntity.ok(new DiaryListResponse(diaryResponseList));
     }
 }
