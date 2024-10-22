@@ -1,5 +1,6 @@
 package org.sopt.diary.service;
 
+import org.sopt.diary.error.TooManyRequestsException;
 import org.sopt.diary.repository.DiaryEntity;
 import org.sopt.diary.repository.DiaryRepository;
 import org.springframework.data.domain.PageRequest;
@@ -33,7 +34,8 @@ public class DiaryService {
 
             Duration duration = Duration.between(recentTime, now);
             if (duration.toMinutes() < 5) {
-                throw new IllegalArgumentException("일기는 5분에 한 번만 작성할 수 있습니다.");
+                long remainingTimeSeconds = 300 - duration.getSeconds();
+                throw new TooManyRequestsException("일기는 5분에 한 번만 작성할 수 있습니다.", remainingTimeSeconds);
             }
         }
         if (title.length() > 30){
