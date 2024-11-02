@@ -21,7 +21,7 @@ public class DiaryEntity {
     public LocalDateTime date;
 
     @Enumerated(EnumType.STRING)
-    @Column
+    @Column(nullable = true)
     public Category category;
 
     public DiaryEntity() {

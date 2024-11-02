@@ -24,6 +24,7 @@ public class DiaryController {
     }
 
     //일기 목록 조회
+    /*
     @GetMapping("/diaries")
     ResponseEntity<DiaryListResponse> get(){
         List<Diary> diaryList = diaryService.getList();
@@ -33,6 +34,7 @@ public class DiaryController {
         }
         return ResponseEntity.ok(new DiaryListResponse(diaryResponseList));
     }
+     */
 
     //일기 상세 조회
     @GetMapping("/diaries/{id}")
@@ -53,13 +55,19 @@ public class DiaryController {
         diaryService.deleteDiary(id);
     }
 
-    //카테고리별 일기 조회
-    @GetMapping("/diaries/category/{category}")
-    ResponseEntity<DiaryListResponse> getDiariesByCategory(@PathVariable("category") Category category) {
-        List<Diary> diaryList = diaryService.getDiariesByCategory(category);
+    //카테고리별 일기 조회와 상세목록 조회
+    @GetMapping("/diaries")
+    public ResponseEntity<DiaryListResponse> get(
+            @RequestParam(value = "category", required = false) Category category) {
+        List<Diary> diaryList;
+        if (category != null) {
+            diaryList = diaryService.getDiariesByCategory(category);
+        } else {
+            diaryList = diaryService.getList();
+        }
         List<DiaryResponse> diaryResponseList = new ArrayList<>();
         for (Diary diary : diaryList) {
-            diaryResponseList.add(new DiaryResponse(diary.getId(),diary.getTitle(),null,null, diary.getCategory()));
+            diaryResponseList.add(new DiaryResponse(diary.getId(),diary.getTitle(),null, null,diary.getCategory()));
         }
         return ResponseEntity.ok(new DiaryListResponse(diaryResponseList));
     }
