@@ -1,5 +1,6 @@
 package org.sopt.diary.service;
 
+import org.sopt.diary.error.ExceedCharacterLimitException;
 import org.sopt.diary.error.TooManyRequestsException;
 import org.sopt.diary.repository.Category;
 import org.sopt.diary.repository.DiaryEntity;
@@ -40,10 +41,10 @@ public class DiaryService {
             }
         }
         if (title.length() > 30){
-            throw new IllegalArgumentException("제목은 30자를 초과할 수 없습니다.");
+            throw new ExceedCharacterLimitException("제목은 30자를 초과할 수 없습니다.",30);
         }
         if (body.length() > 30){
-            throw new IllegalArgumentException("일기 글자수는 30자를 초과할 수 없습니다.");
+            throw new ExceedCharacterLimitException("일기 글자수는 30자를 초과할 수 없습니다.",30);
         }
         diaryRepository.save(
                 new DiaryEntity(title,body,category)
@@ -72,7 +73,7 @@ public class DiaryService {
     //일기 수정
     public void updateDiary(Long id, String body) {
         if (body.length() > 30){
-            throw new IllegalArgumentException("일기 글자수는 30자를 초과할 수 없습니다.");
+            throw new ExceedCharacterLimitException("일기 글자수는 30자를 초과할 수 없습니다.",30);
         }
         DiaryEntity diaryEntity = diaryRepository.findById(id).orElse(null);
         diaryEntity.setBody(body);

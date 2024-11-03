@@ -21,4 +21,12 @@ public class GlobalExceptionHandler {
         body.put("message", minutes+"분 "+seconds+"초 후 다시 시도하세요.");
         return new ResponseEntity<>(body, HttpStatus.TOO_MANY_REQUESTS);
     }
+    @ExceptionHandler(ExceedCharacterLimitException.class)
+    public ResponseEntity<Map<String, Object>> handleExceedCharacterLimit(ExceedCharacterLimitException e) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("status", 400);
+        body.put("error", "Bad Request");
+        body.put("message", e.getMessage());
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
 }
