@@ -60,7 +60,4 @@ public class DiaryEntity {
         return category;
     }
 
-    public void setCategory(Category category){
-        this.category = category;
-    }
 }

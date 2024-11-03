@@ -89,7 +89,7 @@ public class DiaryService {
         List<DiaryEntity> diaryEntityList = diaryRepository.findByCategory(category);
         List<Diary> diaryList = new ArrayList<>();
         for (DiaryEntity diaryEntity : diaryEntityList) {
-            new Diary(diaryEntity.getId(), diaryEntity.getTitle(), null, null, diaryEntity.getCategory());
+            diaryList.add(new Diary(diaryEntity.getId(), diaryEntity.getTitle(), null, null, diaryEntity.getCategory()));
         }
         return diaryList;
     }
