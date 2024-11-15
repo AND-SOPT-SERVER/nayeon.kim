@@ -10,13 +10,15 @@ public class Diary {
     private String body;
     private final LocalDateTime date;
     private Category category;
+    private String nickname;
 
-    public Diary(long id, String title, String body, LocalDateTime date, Category category) {
+    public Diary(long id, String title, String body, LocalDateTime date, Category category, String nickname) {
         this.id = id;
         this.title = title;
         this.body = body;
         this.date = date;
         this.category = category;
+        this.nickname = nickname;
     }
     public long getId() {
         return id;
@@ -33,4 +35,5 @@ public class Diary {
     public Category getCategory() {
         return category;
     }
+    public String getNickname() { return nickname; }
 }

@@ -8,4 +8,5 @@ import java.util.List;
 @Component
 public interface DiaryRepository extends JpaRepository<DiaryEntity, Long> {
     List<DiaryEntity> findByCategory(Category category);
+    boolean existsByTitle(String title);
 }
