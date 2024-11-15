@@ -44,10 +44,13 @@ public class DiaryService {
                 throw new TooManyRequestsException("일기는 5분에 한 번만 작성할 수 있습니다.", remainingTimeSeconds);
             }
         }
-        if (title.length() > 10){
+        if (diaryRepository.existsByTitle(title)) {
+            throw new IllegalArgumentException("이미 존재하는 제목입니다.");
+        }
+        if (title.length() < 1 || title.length() > 10){
             throw new ExceedCharacterLimitException("제목은 10자를 초과할 수 없습니다.",30);
         }
-        if (body.length() > 30){
+        if (body.length() < 1 || body.length() > 30){
             throw new ExceedCharacterLimitException("일기 글자수는 30자를 초과할 수 없습니다.",30);
         }
         diaryRepository.save(
