@@ -15,10 +15,10 @@ public class DiaryEntity {
     @JoinColumn(name = "member_id", nullable = false)
     public MemberEntity member;
 
-    @Column(length = 30)
+    @Column(length = 10, nullable = false, updatable = true)
     public String title;
 
-    @Column(length = 30)
+    @Column(length = 30, nullable = false)
     public String body;
 
     @Column(name = "created_at", nullable = false, updatable = false)
