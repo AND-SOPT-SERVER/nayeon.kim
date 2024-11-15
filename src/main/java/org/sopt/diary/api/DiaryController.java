@@ -1,5 +1,7 @@
 package org.sopt.diary.api;
 
+import org.sopt.diary.member.MemberRequest;
+import org.sopt.diary.member.MemberService;
 import org.sopt.diary.repository.Category;
 import org.sopt.diary.service.Diary;
 import org.sopt.diary.service.DiaryService;
@@ -12,15 +14,17 @@ import java.util.List;
 @RestController
 public class DiaryController {
     private final DiaryService diaryService;
+    private final MemberService memberService;
 
-    public DiaryController(DiaryService diaryService) {
+    public DiaryController(DiaryService diaryService, MemberService memberService) {
         this.diaryService = diaryService;
+        this.memberService = memberService;
     }
 
     //일기 작성
     @PostMapping("/diaries")
-    void post(@RequestBody DiaryRequest diaryRequest) {
-        diaryService.createDiary(diaryRequest.getTitle(), diaryRequest.getBody(), diaryRequest.getCategory());
+    void post(@RequestHeader("memberId") Long memberId,@RequestBody DiaryRequest diaryRequest) {
+        diaryService.createDiary(memberId, diaryRequest.getTitle(), diaryRequest.getBody(), diaryRequest.getCategory());
     }
 
     //일기 목록 조회
@@ -70,5 +74,17 @@ public class DiaryController {
             diaryResponseList.add(new DiaryResponse(diary.getId(),diary.getTitle(),null, null,diary.getCategory()));
         }
         return ResponseEntity.ok(new DiaryListResponse(diaryResponseList));
+    }
+
+    //회원가입
+    @PostMapping("/members/signup")
+    public ResponseEntity<String> signup(@RequestBody MemberRequest memberRequest) {
+        memberService.signupMember(memberRequest.getUsername(), memberRequest.getPassword(), memberRequest.getNickname());
+        return ResponseEntity.ok("회원가입 성공");
+    }
+    @PostMapping("/members/signin")
+    public ResponseEntity<String> signin(@RequestBody MemberRequest memberRequest) {
+        memberService.loginMember(memberRequest.getUsername(), memberRequest.getPassword());
+        return ResponseEntity.ok("로그인 성공");
     }
 }

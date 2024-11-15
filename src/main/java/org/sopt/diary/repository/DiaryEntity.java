@@ -1,8 +1,8 @@
 package org.sopt.diary.repository;
 
 import jakarta.persistence.*;
+import org.sopt.diary.member.MemberEntity;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -11,27 +11,36 @@ public class DiaryEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "member_id", nullable = false)
+    public MemberEntity member;
+
     @Column(length = 30)
     public String title;
 
     @Column(length = 30)
     public String body;
 
-    @Column
+    @Column(name = "created_at", nullable = false, updatable = false)
     public LocalDateTime date;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = true)
+    @Column(nullable = false)
     public Category category;
 
     public DiaryEntity() {
 
     }
-    public DiaryEntity(String title, String body, Category category) {
+    public DiaryEntity(MemberEntity member, String title, String body, Category category) {
+        this.member = member;
         this.title = title;
         this.body = body;
         this.date = LocalDateTime.now();
         this.category = category;
+    }
+
+    public MemberEntity getMember() {
+        return member;
     }
 
     public  String getTitle() {
